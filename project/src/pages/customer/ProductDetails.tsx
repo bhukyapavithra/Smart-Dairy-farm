@@ -3,8 +3,16 @@ import { useParams, Link } from 'react-router-dom';
 import { Star, ArrowLeft, ShoppingCart, Plus, Minus, MapPin, ChevronLeft, ChevronRight, Truck, Clock } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
+<<<<<<< HEAD
 import { Product } from '../../types';
 import { mockProducts, mockFarmers } from '../../data/mockData';
+=======
+import { useAuth } from '../../contexts/AuthContext';
+import { Product, Review } from '../../types';
+import { mockProducts, mockFarmers } from '../../data/mockData';
+import ReviewList from '../../components/review/ReviewList';
+import ReviewForm from '../../components/review/ReviewForm';
+>>>>>>> 73fb3e4 (fully developed)
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,8 +21,16 @@ const ProductDetails: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [farmerInfo, setFarmerInfo] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+<<<<<<< HEAD
   const { addToCart } = useCart();
   const { showToast } = useToast();
+=======
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const { addToCart } = useCart();
+  const { showToast } = useToast();
+  const { isAuthenticated, userType } = useAuth();
+>>>>>>> 73fb3e4 (fully developed)
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -42,6 +58,58 @@ const ProductDetails: React.FC = () => {
           .slice(0, 4);
         
         setRelatedProducts(related);
+<<<<<<< HEAD
+=======
+        
+        // Mock reviews
+        const mockReviews: Review[] = [
+          {
+            id: '1',
+            productId: foundProduct.id,
+            customerId: 'c1',
+            customerName: 'Sarah Johnson',
+            rating: 5,
+            comment: "This milk is absolutely amazing! You can really taste the difference compared to store-bought milk. It's fresh, creamy, and has a wonderful natural sweetness. My kids love it too!",
+            createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            verified: true,
+            helpful: 12,
+            images: [
+              'https://images.pexels.com/photos/248412/pexels-photo-248412.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              'https://images.pexels.com/photos/5946650/pexels-photo-5946650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+            ]
+          },
+          {
+            id: '2',
+            productId: foundProduct.id,
+            customerId: 'c2',
+            customerName: 'Michael Chen',
+            rating: 4,
+            comment: "Great quality milk, and I appreciate knowing exactly where it comes from. The delivery was prompt and the farmer was very friendly. The only reason for 4 stars instead of 5 is that I wish they had more delivery time slots available.",
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            verified: true,
+            helpful: 8,
+            response: {
+              farmerId: foundProduct.farmerId,
+              farmerName: foundProduct.farmerName,
+              comment: "Thank you for your feedback, Michael! We're working on expanding our delivery schedule to better accommodate our customers' needs.",
+              createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString()
+            }
+          },
+          {
+            id: '3',
+            productId: foundProduct.id,
+            customerId: 'c3',
+            customerName: 'Emily Wilson',
+            rating: 5,
+            comment: "I've been buying milk from this farm for the past 3 months and I couldn't be happier. The quality is consistently excellent, and you can really taste the difference. My morning coffee has never been better!",
+            createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+            verified: true,
+            helpful: 15
+          }
+        ];
+        
+        setReviews(mockReviews);
+>>>>>>> 73fb3e4 (fully developed)
       }
       
       setIsLoading(false);
@@ -72,6 +140,31 @@ const ProductDetails: React.FC = () => {
       setQuantity(prev => prev - 1);
     }
   };
+<<<<<<< HEAD
+=======
+  
+  const handleReviewSubmit = async (reviewData: Partial<Review>) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const newReview: Review = {
+      id: Math.random().toString(36).substr(2, 9),
+      productId: id || '',
+      customerId: 'current-user',
+      customerName: 'Current User',
+      rating: reviewData.rating || 5,
+      comment: reviewData.comment || '',
+      createdAt: new Date().toISOString(),
+      verified: true,
+      images: reviewData.images,
+      helpful: 0
+    };
+    
+    setReviews(prev => [newReview, ...prev]);
+    showToast('Review submitted successfully!', 'success');
+    setShowReviewForm(false);
+  };
+>>>>>>> 73fb3e4 (fully developed)
 
   if (isLoading) {
     return (
@@ -143,7 +236,13 @@ const ProductDetails: React.FC = () => {
               <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md">
                 <div className="flex items-center">
                   <Star className="w-4 h-4 text-farm-amber-500 fill-current" />
+<<<<<<< HEAD
                   <span className="ml-1 text-sm font-medium">4.8</span>
+=======
+                  <span className="ml-1 text-sm font-medium">
+                    {(reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(1)}
+                  </span>
+>>>>>>> 73fb3e4 (fully developed)
                 </div>
               </div>
             </div>
@@ -230,6 +329,37 @@ const ProductDetails: React.FC = () => {
           </div>
         </div>
         
+<<<<<<< HEAD
+=======
+        {/* Reviews Section */}
+        <div className="mt-12">
+          {showReviewForm ? (
+            <ReviewForm
+              productId={product.id}
+              onSubmit={handleReviewSubmit}
+              onCancel={() => setShowReviewForm(false)}
+            />
+          ) : (
+            <ReviewList
+              reviews={reviews}
+              productId={product.id}
+              onAddReview={() => {
+                if (!isAuthenticated) {
+                  showToast('Please log in to write a review', 'info');
+                  return;
+                }
+                if (userType !== 'customer') {
+                  showToast('Only customers can write reviews', 'info');
+                  return;
+                }
+                setShowReviewForm(true);
+              }}
+              isCustomer={isAuthenticated && userType === 'customer'}
+            />
+          )}
+        </div>
+        
+>>>>>>> 73fb3e4 (fully developed)
         {/* Farmer Info */}
         {farmerInfo && (
           <div className="mt-12 bg-white rounded-lg shadow-sm overflow-hidden" id={`farm-${product.farmerId}`}>

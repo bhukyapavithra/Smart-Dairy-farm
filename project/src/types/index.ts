@@ -40,6 +40,11 @@ export interface Product {
   isFeatured: boolean;
   createdAt: string;
   updatedAt: string;
+<<<<<<< HEAD
+=======
+  rating?: number;
+  reviewCount?: number;
+>>>>>>> 73fb3e4 (fully developed)
 }
 
 // Cart Types
@@ -80,4 +85,17 @@ export interface Review {
   rating: number;
   comment: string;
   createdAt: string;
+<<<<<<< HEAD
+=======
+  verified: boolean;
+  images?: string[];
+  likes?: number;
+  helpful?: number;
+  response?: {
+    farmerId: string;
+    farmerName: string;
+    comment: string;
+    createdAt: string;
+  };
+>>>>>>> 73fb3e4 (fully developed)
 }
